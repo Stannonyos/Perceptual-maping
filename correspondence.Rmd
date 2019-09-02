@@ -1,0 +1,49 @@
+---
+title: "Perceptual maps using correspondence analysis"
+author: "Stanley Nyoro"
+date: '2019-08-30'
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+Correspondence Analysis
+---
+Correspondence Analysis (CA) is a multivariate statistical technique used to visualize relationship between qualitative variables (e.g. Yes/No). It works through reducing dimensions in the dataset, just as principal component analysis (PCA): PCA works well with quantitative variables.
+CA output is displayed inform of a scatterplot. For ease of interpration, a four quadrant graph is best for displaying the output. Each quadrant match information from columns and rows.
+I have generated a data on banks and how they are perceived by their customers e.g. are they perceived as modern, transparent,techsavvy, etc. Through CA, the output has been clustered in four quadrants to reflect how each bank is perceived. 
+---
+```{r}
+library(MASS)
+library(FactoMineR)
+library(factoextra)
+library(knitr)
+library(kableExtra)
+setwd("D:\\My projects\\banks")
+bank<-read.table("banks.csv",sep=",",header=T)
+attach(bank)
+rownames(bank)<-bank[,1]
+bank[,1]=NULL
+bank %>%
+  kable("html") %>%
+  kable_styling(font_size=10) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
+```{r}
+res.ca<-CA(bank,graph=F)
+fviz_ca_biplot(res.ca,repel=T,axis=c(1,1),map = "symmetric",
+                             labelsize=3,
+                             pointsize=0.5,
+                             invisible = c("row.sup", "col.sup") )
+
+```
+
+Based on the graph, Bank N & D are perceived to be for the rich, are respectable,have high interest rates, tech savvy, stable, modern, trustworthy, support the community and tend to have loyal customers.
+
+Banks E,F & O are profitable, corrupt free, have good adverst, friendly and are market leaders.
+
+Banks B,C,J,M & L are traditional and make poor advertisements.
+
+Banks A, K, G, I & H are unfriendly, untrustworthy, tech averse, have low interest rates, unstable, not market leaders and are for the poor.
+
